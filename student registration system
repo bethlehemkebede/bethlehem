@@ -1,0 +1,119 @@
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Scanner;
+
+abstract class Student {
+    private final String name;
+    private final int id;
+
+    public Student(String name, int id) {
+        this.name = name;
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public abstract void displayDetails();
+}
+
+class registeringStudent extends Student {
+    private final int semester;
+
+    public registeringStudent(String name, int id, int semester) {
+        super(name, id);
+        this.semester = semester;
+    }
+
+    @Override
+    public void displayDetails() {
+        System.out.println("Student registration");
+        System.out.println("Name: " + getName());
+        System.out.println("ID: " + getId());
+        System.out.println("semester: " + semester);
+    }
+}
+
+class StudentRegistrationSystem {
+    private final List<Student> students;
+
+    public StudentRegistrationSystem() {
+        students = new ArrayList<>();
+    }
+
+    public void registerStudent(Student student) {
+        students.add(student);
+        System.out.println("Student registered successfully!");
+    }
+
+    public void displayAllStudents() {
+        if (students.isEmpty()) {
+            System.out.println("No students registered yet.");
+        } else {
+            System.out.println("Registered Students:");
+            for (Student student : students) {
+                student.displayDetails();
+                System.out.println();
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        StudentRegistrationSystem registrationSystem = new StudentRegistrationSystem();
+     String  str;
+        while (true) {
+            System.out.println(" Student Registration System ");
+            System.out.println("1. Register Student");
+            System.out.println("2. Display All Students");
+            System.out.println("3. Exit");
+            System.out.print("Enter your choice: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+            try {
+                switch (choice) {
+                    case 1:
+                        System.out.print("Enter student name: ");
+                        String undergradName = scanner.nextLine();
+                        System.out.print("Enter student ID: ");
+                        int undergradId = scanner.nextInt();
+                        scanner.nextLine(); // Consume the newline character
+                        System.out.print("Enter student semester: ");
+
+                        int year = scanner.nextInt();
+                        scanner.nextLine();
+
+                        Student undergradStudent = new registeringStudent(undergradName, undergradId, year);
+                        registrationSystem.registerStudent(undergradStudent);
+                        break;
+
+                    case 2:
+                        registrationSystem.displayAllStudents();
+                        break;
+                    case 3:
+                        System.out.println("Exiting");
+                        System.exit(0);
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                }
+            }catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter correct data types.");
+                str = "continue";
+                scanner.nextLine();
+            } catch (Exception e) {
+                System.out.println("An error occurred: " + e.getMessage());
+                str = "continue";
+            }
+
+            System.out.println(); // Add a blank line for readability
+        }
+    }
+}
